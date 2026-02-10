@@ -1,0 +1,110 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "check_waitlist",
+      "description": "Get the next patient on the waitlist and the details of the available appointment slot. Call this at the start of each outbound call to get the patient info and slot details.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Let me pull up the details..."
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "check_availability",
+      "description": "Check if a specific appointment slot is still available. Use this if the patient asks about alternative times or to verify the slot hasn't been taken.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "slot_id": {
+            "type": "string",
+            "description": "The ID of the appointment slot to check"
+          }
+        },
+        "required": ["slot_id"]
+      }
+    },
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Let me check that for you real quick..."
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "book_appointment",
+      "description": "Book the appointment slot for the patient. Call this when the patient confirms they want the appointment.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "patient_id": {
+            "type": "string",
+            "description": "The patient's ID from the waitlist"
+          },
+          "slot_id": {
+            "type": "string",
+            "description": "The appointment slot ID to book"
+          },
+          "patient_name": {
+            "type": "string",
+            "description": "The patient's full name for confirmation"
+          }
+        },
+        "required": ["patient_id", "slot_id", "patient_name"]
+      }
+    },
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Perfect, let me book that for you right now..."
+      }
+    ]
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "log_call_outcome",
+      "description": "Record the outcome of the call. Always call this before ending the conversation.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "patient_id": {
+            "type": "string",
+            "description": "The patient's ID"
+          },
+          "outcome": {
+            "type": "string",
+            "enum": ["booked", "declined", "no_answer", "callback_requested", "escalate_to_nurse", "wrong_number"],
+            "description": "The result of the call"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Brief reason for the outcome, e.g. 'scheduling conflict', 'not interested', 'mentioned chest pain'"
+          },
+          "stay_on_waitlist": {
+            "type": "boolean",
+            "description": "Whether the patient wants to remain on the waitlist for future openings"
+          }
+        },
+        "required": ["patient_id", "outcome"]
+      }
+    },
+    "messages": [
+      {
+        "type": "request-start",
+        "content": ""
+      }
+    ]
+  }
+]
